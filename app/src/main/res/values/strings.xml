@@ -4,4 +4,10 @@
     <string name="nombre">Nombre</string>
     <string name="apellido">Apellido</string>
     <string name="fechaNacimiento">Fecha de Nacimiento</string>
+    <string name="validar">Validar</string>
+    <string name="campoRequerido">El campo es requerido</string>
+    <string name="informacion">Información</string>
+    <string name="obligatorio">Todos los campos son obligatorios</string>
+    <string name="title_activity_person_adult">PersonAdult</string>
+    <string name="proceso_exitoso">Proceso exitoso</string>
 </resources>

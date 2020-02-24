@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <EditText
-        android:id="@+id/txtApellido"
+        android:id="@+id/txtLastName"
         android:layout_width="300dp"
         android:layout_height="51dp"
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="36dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/apellido"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNombre" />
+        app:layout_constraintTop_toBottomOf="@+id/txtName" />
 
     <TextView
         android:id="@+id/tittle"
@@ -32,7 +32,7 @@
         app:layout_constraintVertical_bias="0.089" />
 
     <EditText
-        android:id="@+id/txtNombre"
+        android:id="@+id/txtName"
         android:layout_width="300dp"
         android:layout_height="51dp"
         android:layout_marginTop="72dp"
@@ -45,18 +45,32 @@
         app:layout_constraintTop_toBottomOf="@+id/tittle" />
 
     <EditText
-        android:id="@+id/txtFechaNacimiento"
+        android:id="@+id/txtBornDate"
         android:layout_width="299dp"
         android:layout_height="41dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="36dp"
+        android:clickable="true"
         android:ems="10"
+        android:focusable="false"
         android:hint="@string/fechaNacimiento"
         android:inputType="date"
-        android:focusable="false"
-        android:clickable="true"
         android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtApellido" />
+        app:layout_constraintTop_toBottomOf="@+id/txtLastName" />
+
+    <Button
+        android:id="@+id/btnValidar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:text="@string/validar"
+        android:textAllCaps="false"
+        android:onClick="goToPersonActivity"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtBornDate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
