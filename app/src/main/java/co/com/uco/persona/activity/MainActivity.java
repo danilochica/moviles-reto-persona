@@ -26,9 +26,6 @@ import co.com.uco.persona.transversal.Constants;
 
 public class MainActivity extends AppCompatActivity{
 
-
-
-    
     EditText txtName;
     EditText txtLastName;
     EditText txtBornDate;
@@ -70,15 +67,19 @@ public class MainActivity extends AppCompatActivity{
         Date bornDate =  convertStringtoDate(txtBornDate.getText().toString()) ;
 
         if (isNotEmpty(name, lastName, bornDate)  && isAdult(bornDate)) {
-            PersonDTO person = new PersonDTO(name, lastName,bornDate);
 
+            PersonDTO person = PersonDTO.builder()
+                    .name(name)
+                    .lastName(lastName)
+                    .bornDate(bornDate)
+                    .build();
 
             Intent intent = new Intent(MainActivity.this, AdultPerson.class);
             intent.putExtra("PersonDTO",person);
             startActivity(intent);
         }
 
-        if(!isAdult(bornDate) && !"".equals(bornDate)){
+        if(!isAdult(bornDate) && !Constants.EMPTY_STRING.equals(bornDate)){
             alertInfoAdult();
         }
     }
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity{
 
     private boolean isNotEmpty(String name, String lastName, Date bornDate) {
         unsetErrorLabelEditText();
-        if (!name.isEmpty() && !lastName.isEmpty() && !bornDate.equals(Constants.EMPTY)) {
+        if (!name.isEmpty() && !lastName.isEmpty() && !Constants.EMPTY_STRING.equals(bornDate)) {
             return true;
 
         } else {
@@ -123,15 +124,15 @@ public class MainActivity extends AppCompatActivity{
 
     private void setErrorLabelInEditText(String name, String lastName, Date bornDate) {
 
-        if (Constants.EMPTY.equals(name)) {
+        if (Constants.EMPTY_STRING.equals(name)) {
             txtName.setError(getString(R.string.campoRequerido));
         }
 
-        if (Constants.EMPTY.equals(lastName)) {
+        if (Constants.EMPTY_STRING.equals(lastName)) {
             txtLastName.setError(getString(R.string.campoRequerido));
         }
 
-        if (Constants.EMPTY.equals(bornDate)) {
+        if (Constants.EMPTY_STRING.equals(bornDate)) {
             txtBornDate.setError(getString(R.string.campoRequerido));
         }
     }
@@ -171,4 +172,4 @@ public class MainActivity extends AppCompatActivity{
         dialog.show();
     }
 
-}
+}s
