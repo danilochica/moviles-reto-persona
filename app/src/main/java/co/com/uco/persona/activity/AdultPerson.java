@@ -28,8 +28,8 @@ public class AdultPerson extends AppCompatActivity implements Serializable {
         txtName = findViewById(R.id.txtName);
         txtLastName = findViewById(R.id.txtLastName);
 
-        txtName.setText(person.getNombre());
-        txtLastName.setText(person.getApellido());
+        txtName.setText(person.getName());
+        txtLastName.setText(person.getLastName());
 
 
     }

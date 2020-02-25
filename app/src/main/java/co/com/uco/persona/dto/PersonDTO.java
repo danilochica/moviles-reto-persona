@@ -15,15 +15,15 @@ public class PersonDTO implements Serializable {
         this.bornDate = bornDate;
     }
 
-    public Date getFechaNacimiento() {
+    public Date getBornDate() {
         return bornDate;
     }
 
-    public String getNombre() {
+    public String getName() {
         return name;
     }
 
-    public String getApellido() {
+    public String getLastName() {
         return lastName;
     }
 }

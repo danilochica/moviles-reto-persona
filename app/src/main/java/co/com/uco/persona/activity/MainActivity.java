@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,27 +21,56 @@ import java.util.Date;
 
 import co.com.uco.persona.R;
 import co.com.uco.persona.dto.PersonDTO;
+import co.com.uco.persona.transversal.Constants;
 
 
 public class MainActivity extends AppCompatActivity{
 
 
-    public static final int PERSON_IS_ADULT = 18;
 
-    EditText txtNombre;
-    EditText txtApellido;
-    EditText txtFechaNacimiento;
+    
+    EditText txtName;
+    EditText txtLastName;
+    EditText txtBornDate;
     DatePickerDialog.OnDateSetListener onDateSetListener;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        txtName = findViewById(R.id.txtName);
+        txtLastName = findViewById(R.id.txtLastName);
+        txtBornDate = findViewById(R.id.txtBornDate);
+
+        txtBornDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtBornDate.setText("");
+                createCalendar();
+            }
+        });
+
+        onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = day + "-"  +  month  + "-" + year;
+                txtBornDate.setText(date);
+            }
+        };
+    }
 
     public void goToPersonActivity(View view) {
 
-        String name = txtNombre.getText().toString();
-        String lastName = txtApellido.getText().toString();
-        String bornDate = txtFechaNacimiento.getText().toString();
+        String name = txtName.getText().toString();
+        String lastName = txtLastName.getText().toString();
+        Date bornDate =  convertStringtoDate(txtBornDate.getText().toString()) ;
 
         if (isNotEmpty(name, lastName, bornDate)  && isAdult(bornDate)) {
-            PersonDTO person = new PersonDTO(name, lastName, convertStringtoDate(bornDate));
+            PersonDTO person = new PersonDTO(name, lastName,bornDate);
 
 
             Intent intent = new Intent(MainActivity.this, AdultPerson.class);
@@ -53,10 +81,10 @@ public class MainActivity extends AppCompatActivity{
         if(!isAdult(bornDate) && !"".equals(bornDate)){
             alertInfoAdult();
         }
-
     }
 
     private void alertInfoAdult() {
+
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle(R.string.informacion);
         alertDialog.setMessage("La persona es menor de edad");
@@ -69,102 +97,66 @@ public class MainActivity extends AppCompatActivity{
         alertDialog.show();
     }
 
-    private boolean isAdult(String bornDate) {
-        return calculateYearsOld(convertStringtoDate(bornDate)) >= PERSON_IS_ADULT;
+    private boolean isAdult(Date bornDate) {
+        return calculateYearsOld(bornDate) >= Constants.AGE_TO_BE_ADULT;
     }
 
     private int calculateYearsOld(Date bornDate){
-
         Calendar born = Calendar.getInstance();
         born.setTime(bornDate);
-
         Calendar today = Calendar.getInstance();
         today.setTime(new Date());
 
         return today.get(Calendar.YEAR) - born.get(Calendar.YEAR);
-
     }
 
-    private boolean isNotEmpty(String name, String lastName, String bornDate) {
-
+    private boolean isNotEmpty(String name, String lastName, Date bornDate) {
         unsetErrorLabelEditText();
-        if (!name.isEmpty() && !lastName.isEmpty() && !bornDate.isEmpty()) {
+        if (!name.isEmpty() && !lastName.isEmpty() && !bornDate.equals(Constants.EMPTY)) {
             return true;
 
         } else {
             setErrorLabelInEditText(name, lastName, bornDate);
             return false;
         }
-
     }
 
-    private void setErrorLabelInEditText(String name, String lastName, String bornDate) {
-        if ("".equals(name)) {
-            txtNombre.setError(getString(R.string.campoRequerido));
+    private void setErrorLabelInEditText(String name, String lastName, Date bornDate) {
+
+        if (Constants.EMPTY.equals(name)) {
+            txtName.setError(getString(R.string.campoRequerido));
         }
 
-        if ("".equals(lastName)) {
-            txtApellido.setError(getString(R.string.campoRequerido));
+        if (Constants.EMPTY.equals(lastName)) {
+            txtLastName.setError(getString(R.string.campoRequerido));
         }
 
-        if ("".equals(bornDate)) {
-            txtFechaNacimiento.setError(getString(R.string.campoRequerido));
+        if (Constants.EMPTY.equals(bornDate)) {
+            txtBornDate.setError(getString(R.string.campoRequerido));
         }
     }
-
 
     private void unsetErrorLabelEditText(){
-        txtNombre.setError(null);
-        txtApellido.setError(null);
-        txtFechaNacimiento.setError(null);
+        txtName.setError(null);
+        txtLastName.setError(null);
+        txtBornDate.setError(null);
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        txtNombre = findViewById(R.id.txtName);
-        txtApellido = findViewById(R.id.txtLastName);
-        txtFechaNacimiento = findViewById(R.id.txtBornDate);
-
-        txtFechaNacimiento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtFechaNacimiento.setText("");
-                createCalendar();
-            }
-        });
-
-        onDateSetListener = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
-                String date = day + "-"  +  month  + "-" + year;
-                txtFechaNacimiento.setText(date);
-            }
-
-        };
-    }
-
-
 
     private Date convertStringtoDate (String bornString) {
-
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Date dateConverted = new Date();
+
         try {
             dateConverted =  sdf.parse(bornString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         return dateConverted;
 
     }
 
     private void createCalendar() {
-
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
